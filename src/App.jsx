@@ -1,13 +1,14 @@
-import {Button} from './components/ui/button'
+import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react";
 
-function App() {
-  return(
-<div className='hover:bg-gray-100'>
-  <Button>Click me</Button>
-</div>
-  )
-  
-  
+export default function App() {
+  return (
+    <header>
+      <SignedOut>
+        <SignInButton />
+      </SignedOut>
+      <SignedIn>
+        <UserButton />
+      </SignedIn>
+    </header>
+  );
 }
-
-export default App
