@@ -3,9 +3,14 @@ import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import './index.css'
 import { ClerkProvider } from '@clerk/clerk-react'
+import axios from 'axios';
+
 
 // Import your Publishable Key
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
+
+// setting the baseUrl for axios
+axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL
 
 if (!PUBLISHABLE_KEY) {
   throw new Error("Missing Publishable Key")

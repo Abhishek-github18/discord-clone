@@ -59,15 +59,15 @@
   }
   .dark {
 
-    --background: 20 14.3% 4.1%;
+    --background: 220 5% 20%; /* #313338 */
 
-    --foreground: 60 9.1% 97.8%;
+    --foreground: 240 20% 90%; /* #ebecf3 */
 
     --card: 20 14.3% 4.1%;
 
     --card-foreground: 60 9.1% 97.8%;
 
-    --popover: 20 14.3% 4.1%;
+    --popover:  220 5% 20%;
 
     --popover-foreground: 60 9.1% 97.8%;
 
@@ -105,7 +105,10 @@
 
     --chart-4: 280 65% 60%;
 
-    --chart-5: 340 75% 55%
+    --chart-5: 340 75% 55%;
+
+    /* custom dark theme colors */
+
   }
 }
 
@@ -117,4 +120,3 @@
     @apply bg-background text-foreground;
   }
 }
-  
