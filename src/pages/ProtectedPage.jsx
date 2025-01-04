@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useProfile } from '../hooks/useProfile';
 import { useServer } from '../hooks/useServer';
+import InitialModal from '../components/custom/InitialModal';
 
 const ProtectedPage = () => {
   const [userProfile, setUserProfile] = useState({});
@@ -9,14 +10,7 @@ const ProtectedPage = () => {
   useProfile(setUserProfile);
 
   // fetching the servers associated with the user
-  useServer(setServers, userProfile.id);
-  
-  // need to fetch the channels associated with the servers
-  // need to fetch the messages associated with the channels
-  // need to fetch the users associated with the messages
-  // need to fetch the reactions associated with the messages
-  // need to fetch the users associated with the reactions
-
+  useServer(setServers, userProfile.id);  
 
   return (
     userProfile ? (
@@ -27,7 +21,7 @@ const ProtectedPage = () => {
         <ul>
          {
           servers.length === 0 ? (
-            <li>No servers, Create your server</li>
+            <InitialModal />
           ) : (
             servers.map((server) => (
               <li key={server?.id}>{server?.name}</li>
