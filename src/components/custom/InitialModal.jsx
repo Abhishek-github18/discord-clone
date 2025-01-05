@@ -1,4 +1,5 @@
-import { Input } from "@/components/ui/input";
+import { UploadButton } from "@uploadthing/react";
+import { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -8,28 +9,27 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { useForm } from "react-hook-form";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormField, FormItem, FormLabel, FormControl } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 export default function InitialModal() {
+  const [uploadedImage, setUploadedImage] = useState(null); // Store uploaded image URL
   const form = useForm({
     defaultValues: {
       name: "",
-      imageIcon: "",
     },
-    mode: "onSubmit", // Validate only on submit
+    mode: "onSubmit",
   });
+
   const isLoading = form.formState.isSubmitting;
 
   const onSubmit = async (data) => {
-    console.log("Form Submitted:", data);
+    const payload = {
+      ...data,
+      imageIcon: uploadedImage, // Add uploaded image URL
+    };
+    console.log("Form Submitted:", payload);
   };
 
   return (
@@ -47,8 +47,30 @@ export default function InitialModal() {
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <div className="space-y-4">
               <div className="flex items-center space-x-4">
-                <div className="w-16 h-16 px-4 rounded-full bg-gray-600 flex items-center justify-center text-gray-400">
-                  TODO: Icon
+                {/* Uploadthing Upload Button */}
+                <div className="w-16 h-16 rounded-full bg-gray-600 flex items-center justify-center text-gray-400">
+                  {uploadedImage ? (
+                    <img
+                      src={uploadedImage}
+                      alt="Uploaded Icon"
+                      className="w-full h-full object-cover rounded-full"
+                    />
+                  ) : (
+                    <span className="text-sm">Upload Icon</span>
+                  )}
+                  <UploadButton
+                    endpoint="http://localhost:3000/api/uploadthing"
+                    onUploadComplete={(res) => {
+                      // Handle successful upload
+                      if (res && res.fileUrl) {
+                        setUploadedImage(res.fileUrl); // Set uploaded image URL
+                        console.log("Uploaded file URL:", res.fileUrl);
+                      }
+                    }}
+                    onUploadError={(error) => {
+                      console.error("Upload failed:", error);
+                    }}
+                  />
                 </div>
                 <div className="flex-1">
                   <FormField
@@ -75,26 +97,27 @@ export default function InitialModal() {
                             {...field}
                             id="name"
                             className={`bg-[#202225] text-white border ${
-                              fieldState.error ? "border-red-500" : "border-gray-700"
+                              fieldState.error
+                                ? "border-red-500"
+                                : "border-gray-700"
                             } focus:ring-2 focus:ring-indigo-500 focus:outline-none placeholder-gray-500`}
                             placeholder="Enter server name"
                           />
                         </FormControl>
                         {fieldState.error && (
-                          <FormMessage className="text-red-500 text-sm mt-1">
+                          <p className="text-red-500 text-sm mt-1">
                             {fieldState.error.message}
-                          </FormMessage>
+                          </p>
                         )}
                       </FormItem>
                     )}
-                  ></FormField>
+                  />
                 </div>
               </div>
             </div>
             <DialogFooter className="bg-[#202225] border-t border-gray-700 px-6 py-4 mt-4">
               <Button
                 type="submit"
-                variant="primary"
                 disabled={isLoading}
                 className="bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-2 px-4 rounded"
               >
