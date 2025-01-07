@@ -12,6 +12,7 @@ import { useForm } from "react-hook-form";
 import { Form, FormField, FormItem, FormLabel, FormControl } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import {ImageDropZone} from './ImageDropZone';
 
 export default function InitialModal() {
   const [uploadedImage, setUploadedImage] = useState(null); // Store uploaded image URL
@@ -49,28 +50,7 @@ export default function InitialModal() {
               <div className="flex items-center space-x-4">
                 {/* Uploadthing Upload Button */}
                 <div className="w-16 h-16 rounded-full bg-gray-600 flex items-center justify-center text-gray-400">
-                  {uploadedImage ? (
-                    <img
-                      src={uploadedImage}
-                      alt="Uploaded Icon"
-                      className="w-full h-full object-cover rounded-full"
-                    />
-                  ) : (
-                    <span className="text-sm">Upload Icon</span>
-                  )}
-                  <UploadButton
-                    endpoint="http://localhost:3000/api/uploadthing"
-                    onUploadComplete={(res) => {
-                      // Handle successful upload
-                      if (res && res.fileUrl) {
-                        setUploadedImage(res.fileUrl); // Set uploaded image URL
-                        console.log("Uploaded file URL:", res.fileUrl);
-                      }
-                    }}
-                    onUploadError={(error) => {
-                      console.error("Upload failed:", error);
-                    }}
-                  />
+                 <ImageDropZone/>
                 </div>
                 <div className="flex-1">
                   <FormField
