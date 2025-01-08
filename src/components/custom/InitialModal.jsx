@@ -1,4 +1,3 @@
-import { UploadButton } from "@uploadthing/react";
 import { useState } from "react";
 import {
   Dialog,
@@ -12,10 +11,10 @@ import { useForm } from "react-hook-form";
 import { Form, FormField, FormItem, FormLabel, FormControl } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import {ImageDropZone} from './ImageDropZone';
+import { ImageDropZone } from "./ImageDropZone";
 
 export default function InitialModal() {
-  const [uploadedImage, setUploadedImage] = useState(null); // Store uploaded image URL
+  const [uploadedImage, setUploadedImage] = useState(null);  
   const form = useForm({
     defaultValues: {
       name: "",
@@ -28,7 +27,7 @@ export default function InitialModal() {
   const onSubmit = async (data) => {
     const payload = {
       ...data,
-      imageIcon: uploadedImage, // Add uploaded image URL
+      imageIcon: uploadedImage,
     };
     console.log("Form Submitted:", payload);
   };
@@ -46,59 +45,55 @@ export default function InitialModal() {
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
-            <div className="space-y-4">
-              <div className="flex items-center space-x-4">
-                {/* Uploadthing Upload Button */}
-                <div className="w-16 h-16 rounded-full bg-gray-600 flex items-center justify-center text-gray-400">
-                 <ImageDropZone/>
-                </div>
-                <div className="flex-1">
-                  <FormField
-                    control={form.control}
-                    name="name"
-                    rules={{
-                      required: "Server name is required",
-                      minLength: {
-                        value: 3,
-                        message: "Server name must be at least 3 characters",
-                      },
-                    }}
-                    render={({ field, fieldState }) => (
-                      <FormItem>
-                        <FormLabel
-                          htmlFor="name"
-                          className="uppercase text-xs font-bold text-gray-400"
-                        >
-                          Server Name
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            disabled={isLoading}
-                            {...field}
-                            id="name"
-                            className={`bg-[#202225] text-white border ${
-                              fieldState.error
-                                ? "border-red-500"
-                                : "border-gray-700"
-                            } focus:ring-2 focus:ring-indigo-500 focus:outline-none placeholder-gray-500`}
-                            placeholder="Enter server name"
-                          />
-                        </FormControl>
-                        {fieldState.error && (
-                          <p className="text-red-500 text-sm mt-1">
-                            {fieldState.error.message}
-                          </p>
-                        )}
-                      </FormItem>
+            <div className="space-y-6">
+              {/* ImageDropZone Component */}
+              <ImageDropZone onUploadComplete={setUploadedImage} />
+
+              {/* Server Name Input */}
+              <FormField
+                control={form.control}
+                name="name"
+                rules={{
+                  required: "Server name is required",
+                  minLength: {
+                    value: 3,
+                    message: "Server name must be at least 3 characters",
+                  },
+                }}
+                render={({ field, fieldState }) => (
+                  <FormItem>
+                    <FormLabel
+                      htmlFor="name"
+                      className="uppercase text-xs font-bold text-gray-400"
+                    >
+                      Server Name
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        disabled={isLoading}
+                        {...field}
+                        id="name"
+                        className={`bg-[#202225] text-white border ${
+                          fieldState.error
+                            ? "border-red-500"
+                            : "border-gray-700"
+                        } focus:ring-2 focus:ring-indigo-500 focus:outline-none placeholder-gray-500`}
+                        placeholder="Enter server name"
+                      />
+                    </FormControl>
+                    {fieldState.error && (
+                      <p className="text-red-500 text-sm mt-1">
+                        {fieldState.error.message}
+                      </p>
                     )}
-                  />
-                </div>
-              </div>
+                  </FormItem>
+                )}
+              />
             </div>
             <DialogFooter className="bg-[#202225] border-t border-gray-700 px-6 py-4 mt-4">
               <Button
                 type="submit"
-                disabled={isLoading}
+                disabled={isLoading || !uploadedImage}
                 className="bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-2 px-4 rounded"
               >
                 Create
