@@ -1,10 +1,13 @@
 import { useUser } from "@clerk/clerk-react";
 import supabase from "../utils/supabaseClient";
 import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { setUser } from "../utils/redux/slices/userSlice";
 
-export const useProfile = (setUserProfile) => {
+export const useProfile = () => {
+
+  const dispatch = useDispatch();
   const { isSignedIn, user, isLoaded } = useUser();
-//   const [profile, setProfile] = useState(null);
 
   useEffect(() => {
     const getOrCreateProfile = async () => {
@@ -45,10 +48,12 @@ export const useProfile = (setUserProfile) => {
           if (insertError) {
             console.error(insertError);
           } else {
-            setUserProfile(profile); // Update state with new profile
+            dispatch(setUser(profile)); // Update Redux state with new profile
+            // setUserProfile(profile); // Update state with new profile
           }
         } else {
-            setUserProfile(profiles[0]); // Update state with fetched profile
+          dispatch(setUser(profiles[0])); // Update Redux state with fetched profile
+            // setUserProfile(profiles[0]); // Update state with fetched profile
         }
       }
     };

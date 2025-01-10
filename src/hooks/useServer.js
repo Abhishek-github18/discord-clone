@@ -1,15 +1,18 @@
 import supabase from "../utils/supabaseClient";
 import { useEffect } from "react";
+import { useSelector } from "react-redux";
+export const useServer = (setServers) => {
 
-export const useServer = (setServers, id) => {
+  const userProfile = useSelector((state) => state?.user?.user);
+
   useEffect(() => {
     const getServer = async () => {
-      if (!id) return;
+      if (!userProfile) return;
 
       const { data: servers, error } = await supabase
         .from("servers")
         .select("*")
-        .eq("owner_id", id);
+        .eq("owner_id", userProfile.id);
 
       if (error) {
         console.error(error);
@@ -20,5 +23,5 @@ export const useServer = (setServers, id) => {
     };
 
     getServer();
-  }, [id, setServers]);
+  }, [userProfile, setServers]);
 }

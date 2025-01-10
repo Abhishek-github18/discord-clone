@@ -12,6 +12,8 @@ import { Form, FormField, FormItem, FormLabel, FormControl } from "@/components/
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ImageDropZone } from "./ImageDropZone";
+import { useAuth } from "@clerk/clerk-react";
+
 
 export default function InitialModal() {
   const [uploadedImage, setUploadedImage] = useState(null);  
@@ -24,12 +26,39 @@ export default function InitialModal() {
 
   const isLoading = form.formState.isSubmitting;
 
+  const { getToken } = useAuth();
+
+
   const onSubmit = async (data) => {
     const payload = {
       ...data,
       imageIcon: uploadedImage,
     };
-    console.log("Form Submitted:", payload);
+  
+    try {
+      // Get the auth token
+      const token = await getToken();
+      
+      const response = await fetch("http://localhost:3000/api/servers", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // Include token in Authorization header
+        },
+        body: JSON.stringify(payload),
+      });
+  
+      const result = await response.json();
+  
+      if (response.ok) {
+        console.log("Server created successfully:", result);
+        
+      } else {
+        console.error("Error creating server:", result);
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
   };
 
   return (

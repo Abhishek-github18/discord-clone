@@ -1,27 +1,31 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { SignedIn, SignedOut, SignInButton, UserButton, RedirectToSignIn } from "@clerk/clerk-react";
-import ProtectedPage from "./pages/ProtectedPage";
+import Home from "./pages/Home";
 import { ThemeProvider } from "./components/theme-provider";
+import { useUser } from "@clerk/clerk-react";
+
 export default function App() {
+  const { isSignedIn, user, isLoaded } = useUser();
   return (
     <Router>
       <ThemeProvider defaultTheme="dark" enableSystemTheme={false} storageKey='discord-theme'>
-      <header>
+      {/* <header>
         <SignedOut>
           <SignInButton />
         </SignedOut>
         <SignedIn>
           <UserButton />
         </SignedIn>
-      </header>
+      </header> */}
       <Routes>
         <Route
-          path="/protected"
+          path="/"
           element={
-            <SignedIn>
-              <ProtectedPage />
-            </SignedIn>
-          }
+            isSignedIn ? (
+              <Home /> // Render Home if signed in
+            ) : (
+              <RedirectToSignIn /> // Redirect to sign in if not signed in
+            )}
         />
         <Route
           path="/app"

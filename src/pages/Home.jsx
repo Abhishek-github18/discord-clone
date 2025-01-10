@@ -2,15 +2,18 @@ import { useState } from 'react';
 import { useProfile } from '../hooks/useProfile';
 import { useServer } from '../hooks/useServer';
 import InitialModal from '../components/custom/InitialModal';
+import { useSelector } from 'react-redux';
 
-const ProtectedPage = () => {
-  const [userProfile, setUserProfile] = useState({});
+const Home = () => {
+  // const [userProfile, setUserProfile] = useState({});
   const [servers, setServers] = useState([]);
 
-  useProfile(setUserProfile);
+  useProfile();
+
+  const userProfile = useSelector((state) => state?.user?.user);
 
   // fetching the servers associated with the user
-  useServer(setServers, userProfile.id);  
+  useServer(setServers);  
 
   return (
     userProfile ? (
@@ -38,4 +41,4 @@ const ProtectedPage = () => {
   )
  
 }
-export default ProtectedPage;
+export default Home;
