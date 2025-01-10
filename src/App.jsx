@@ -3,12 +3,14 @@ import { SignedIn, SignedOut, SignInButton, UserButton, RedirectToSignIn } from 
 import Home from "./pages/Home";
 import { ThemeProvider } from "./components/theme-provider";
 import { useUser } from "@clerk/clerk-react";
+import { TooltipProvider } from "./components/ui/tooltip";
 
 export default function App() {
   const { isSignedIn, user, isLoaded } = useUser();
   return (
     <Router>
       <ThemeProvider defaultTheme="dark" enableSystemTheme={false} storageKey='discord-theme'>
+        <TooltipProvider>
       {/* <header>
         <SignedOut>
           <SignInButton />
@@ -36,6 +38,7 @@ export default function App() {
           }
         />
       </Routes>
+      </TooltipProvider>
       </ThemeProvider>
     </Router>
   );
