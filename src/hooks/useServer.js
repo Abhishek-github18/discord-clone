@@ -1,9 +1,13 @@
 import supabase from "../utils/supabaseClient";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { setServer } from "../utils/redux/slices/serverSlice";
+
 export const useServer = (setServers) => {
 
   const userProfile = useSelector((state) => state?.user?.user);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const getServer = async () => {
@@ -19,7 +23,8 @@ export const useServer = (setServers) => {
         return;
       }
 
-      setServers(servers);
+      dispatch(setServer(servers));
+      // setServers(servers);
     };
 
     getServer();
