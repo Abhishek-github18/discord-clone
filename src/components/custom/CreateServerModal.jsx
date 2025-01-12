@@ -13,10 +13,13 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ImageDropZone } from "./ImageDropZone";
 import { useAuth } from "@clerk/clerk-react";
+import propValidation from "prop-types";
+import { getServers } from "../../hooks/utils/getServers";
+import {useDispatch, useSelector} from 'react-redux'
+import { setServer } from "../../utils/redux/slices/serverSlice";
 
-
-export default function InitialModal() {
-  const [uploadedImage, setUploadedImage] = useState(null);  
+export default function CreateServerModal({ onClose, openModal }) {
+  const [uploadedImage, setUploadedImage] = useState(null);
   const form = useForm({
     defaultValues: {
       name: "",
@@ -24,35 +27,40 @@ export default function InitialModal() {
     mode: "onSubmit",
   });
 
+  const dispatch = useDispatch();
+  const userProfile = useSelector((state) => state?.user?.user);
+
+
   const isLoading = form.formState.isSubmitting;
 
   const { getToken } = useAuth();
-
 
   const onSubmit = async (data) => {
     const payload = {
       ...data,
       imageIcon: uploadedImage,
     };
-  
+
     try {
-      // Get the auth token
       const token = await getToken();
-      
+
       const response = await fetch("http://localhost:3000/api/servers", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // Include token in Authorization header
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(payload),
       });
-  
+
       const result = await response.json();
-  
+
       if (response.ok) {
         console.log("Server created successfully:", result);
-        
+        onClose(); // Close the modal after successful creation
+
+        const servers = await getServers(userProfile?.id); // Reuse the utility function
+        dispatch(setServer(servers)); // Update Redux state
       } else {
         console.error("Error creating server:", result);
       }
@@ -62,7 +70,7 @@ export default function InitialModal() {
   };
 
   return (
-    <Dialog open>
+    <Dialog open={openModal} onOpenChange={onClose}>
       <DialogContent className="bg-[#2f3136] text-white rounded-md shadow-lg p-6 max-w-md">
         <DialogHeader>
           <DialogTitle className="text-xl font-bold text-white">
@@ -75,10 +83,8 @@ export default function InitialModal() {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <div className="space-y-6">
-              {/* ImageDropZone Component */}
               <ImageDropZone onUploadComplete={setUploadedImage} />
 
-              {/* Server Name Input */}
               <FormField
                 control={form.control}
                 name="name"
@@ -91,10 +97,7 @@ export default function InitialModal() {
                 }}
                 render={({ field, fieldState }) => (
                   <FormItem>
-                    <FormLabel
-                      htmlFor="name"
-                      className="uppercase text-xs font-bold text-gray-400"
-                    >
+                    <FormLabel htmlFor="name" className="uppercase text-xs font-bold text-gray-400">
                       Server Name
                     </FormLabel>
                     <FormControl>
@@ -103,9 +106,7 @@ export default function InitialModal() {
                         {...field}
                         id="name"
                         className={`bg-[#202225] text-white border ${
-                          fieldState.error
-                            ? "border-red-500"
-                            : "border-gray-700"
+                          fieldState.error ? "border-red-500" : "border-gray-700"
                         } focus:ring-2 focus:ring-indigo-500 focus:outline-none placeholder-gray-500`}
                         placeholder="Enter server name"
                       />
@@ -134,3 +135,8 @@ export default function InitialModal() {
     </Dialog>
   );
 }
+
+CreateServerModal.propTypes = {
+  onClose: propValidation.func.isRequired,
+  openModal: propValidation.bool.isRequired,
+};

@@ -1,5 +1,5 @@
 import { useProfile } from "../hooks/useProfile";
-import InitialModal from "../components/custom/InitialModal";
+import InitialModal from "../components/custom/CreateServerModal";
 import { useSelector } from "react-redux";
 import { useServer } from "../hooks/useServer";
 import NavigationSidebar from "../components/custom/Navigation-Sidebar";
@@ -22,7 +22,7 @@ const Home = () => {
       <NavigationSidebar />
 
       {/* Main Content */}
-      <div className="flex-grow p-6 bg-gray-100 dark:bg-gray-800">
+      <div className="flex-grow p-6 bg-gray-100 dark:bg-gray-800/10">
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Welcome, {userProfile.name}</h1>
         <h2 className="mt-4 text-xl font-semibold text-gray-700 dark:text-gray-300">Your Servers</h2>
         <ul className="mt-2 space-y-2">
