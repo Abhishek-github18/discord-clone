@@ -1,16 +1,19 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { SignedIn, SignedOut, SignInButton, UserButton, RedirectToSignIn } from "@clerk/clerk-react";
-import Home from "./pages/Home";
+import { SignedOut, RedirectToSignIn } from "@clerk/clerk-react";
 import { ThemeProvider } from "./components/theme-provider";
 import { useUser } from "@clerk/clerk-react";
 import { TooltipProvider } from "./components/ui/tooltip";
+import NavigationSidebar from "./components/custom/Navigation-Sidebar";
+import Home from "./pages/Home";
+import Server from "./pages/Server";
 
 export default function App() {
-  const { isSignedIn, user, isLoaded } = useUser();
+  const { isSignedIn } = useUser();
   return (
     <Router>
       <ThemeProvider defaultTheme="dark" enableSystemTheme={false} storageKey='discord-theme'>
         <TooltipProvider>
+        <NavigationSidebar />
       {/* <header>
         <SignedOut>
           <SignInButton />
@@ -20,6 +23,7 @@ export default function App() {
         </SignedIn>
       </header> */}
       <Routes>
+      
         <Route
           path="/"
           element={
@@ -28,6 +32,16 @@ export default function App() {
             ) : (
               <RedirectToSignIn /> // Redirect to sign in if not signed in
             )}
+        />
+        <Route
+          path="/server/:serverId"
+          element={
+            isSignedIn ? (
+              <Server/>
+            ):(
+              <RedirectToSignIn/>
+            )
+          }
         />
         <Route
           path="/app"

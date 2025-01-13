@@ -1,12 +1,8 @@
 import { useProfile } from "../hooks/useProfile";
-import InitialModal from "../components/custom/CreateServerModal";
 import { useSelector } from "react-redux";
 import { useServer } from "../hooks/useServer";
-import NavigationSidebar from "../components/custom/Navigation-Sidebar";
 
 const Home = () => {
-  // const [userProfile, setUserProfile] = useState({});
-  // const [servers, setServers] = useState([]);
 
   useProfile();
 
@@ -18,11 +14,7 @@ const Home = () => {
 
   return userProfile ? (
     <div className="flex h-screen">
-      {/* Sidebar */}
-      <NavigationSidebar />
-
-      {/* Main Content */}
-      <div className="flex-grow p-6 bg-gray-100 dark:bg-gray-800/10">
+      <div className="flex-grow p-6 ml-12 bg-gray-100 dark:bg-gray-800/10">
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Welcome, {userProfile.name}</h1>
         <h2 className="mt-4 text-xl font-semibold text-gray-700 dark:text-gray-300">Your Servers</h2>
         <ul className="mt-2 space-y-2">
@@ -33,7 +25,7 @@ const Home = () => {
               </li>
             ))
           ) : (
-            <p className="text-gray-600 dark:text-gray-400">No servers found. Create one using the "+" button!</p>
+            <p className="text-gray-600 dark:text-gray-400">No servers found. Create one using the &quot;+&quot; button!</p>
           )}
         </ul>
       </div>

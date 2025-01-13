@@ -14,6 +14,8 @@ import { ScrollArea } from "../ui/scroll-area";
 import { ModeToggle } from "../mode-toggle";
 import { UserButton } from "@clerk/clerk-react";
 import CreateServerModal from "./CreateServerModal";
+import { useServer } from "../../hooks/useServer";
+import { useProfile } from "../../hooks/useProfile";
 
 
 const NavigationSidebar = () => {
@@ -21,8 +23,11 @@ const NavigationSidebar = () => {
   const [activeServerId, setActiveServerId] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
 
+  useProfile();
+  useServer();
+
   return (
-    <div className="flex flex-col items-center w-12 h-screen bg-gray-200 dark:bg-[#1E1F22] space-y-4 py-4">
+    <div className="fixed left-0 flex flex-col items-center w-12 h-screen bg-gray-200 dark:bg-[#1E1F22] space-y-4 py-4">
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger>
@@ -62,6 +67,7 @@ const NavigationSidebar = () => {
                       "flex items-center justify-center w-10 h-10 transition duration-200 hover:rounded-md"
                     )}
                     onClick={() => setActiveServerId(server?.id)}
+                    to={`/server/${server?.id}`}
                   >
                     {server?.icon_url ? (
                       <img

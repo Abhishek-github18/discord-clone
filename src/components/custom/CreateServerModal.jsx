@@ -139,4 +139,4 @@ export default function CreateServerModal({ onClose, openModal }) {
 CreateServerModal.propTypes = {
   onClose: propValidation.func.isRequired,
   openModal: propValidation.bool.isRequired,
-};
+};  
